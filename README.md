@@ -1,2 +1,1 @@
-## Content list
-- [Marketing Campaign](https://github.com/clarentcelsia/ReportAnalyst/blob/master/marketing_campaign.ipynb)
+[Marketing Campaign](https://github.com/clarentcelsia/ReportAnalyst/blob/master/marketing_campaign.ipynb)

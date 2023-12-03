@@ -56,3 +56,28 @@ ORDER BY SUM(od.DISCOUNT_AFTER) DESC;
 **/
 
 -- https://www.postgresql.org/docs/current/tablefunc.html
+CREATE EXTENSION IF NOT EXISTS tablefunc;
+SELECT CATEGORY,
+    COALESCE("2021", 0) AS "2021",
+    COALESCE("2022", 0) AS "2022"
+FROM crosstab('
+    select 
+        sk.CATEGORY, --piv point
+        EXTRACT(YEAR FROM od.ORDER_DATE),
+        SUM(od.DISCOUNT_AFTER)
+    from order_detail od
+    inner join sku_detail sk on sk.ID = od.SKU_ID
+    where od.IS_NET=1 and od.IS_VALID=1 
+        and (EXTRACT(YEAR FROM od.ORDER_DATE)=2021 or EXTRACT(YEAR FROM ORDER_DATE)=2022)
+    group by sk.CATEGORY, EXTRACT(YEAR FROM od.ORDER_DATE)',  
+    
+    -- cross category by its year   
+    'select distinct EXTRACT(YEAR FROM ORDER_DATE) 
+    from order_detail 
+    where EXTRACT(YEAR FROM ORDER_DATE) IN (2021, 2022)'
+) AS PIVOT(
+    CATEGORY VARCHAR,
+    "2021" FLOAT,
+    "2022" FLOAT
+)
+ORDER BY "2021" DESC;

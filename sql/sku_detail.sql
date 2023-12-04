@@ -81,3 +81,83 @@ FROM crosstab('
     "2022" FLOAT
 )
 ORDER BY "2021" DESC;
+
+-- TOP 5 SELLING CATEGORY WITH THE HIGHEST GROSS MARGIN
+-- SUPERSTORE, MOBILE & TABLETS, APPLIANCES, ENTERTAINMENT, WOMEN FASHION exhibit substantial revenue growth, surpassing 35% above.
+WITH GROSS_TABLE AS(
+    SELECT 
+        sk.CATEGORY, 
+        SUM(CASE WHEN EXTRACT(YEAR FROM ORDER_DATE)=2021 THEN od.DISCOUNT_AFTER END) AS "GROSS REVENUE 2021",
+        SUM(CASE WHEN EXTRACT(YEAR FROM ORDER_DATE)=2021 THEN sk.COGS END) AS "TOTAL COGS 2021",
+        SUM(CASE WHEN EXTRACT(YEAR FROM ORDER_DATE)=2022 THEN od.DISCOUNT_AFTER END) AS "GROSS REVENUE 2022",
+        SUM(CASE WHEN EXTRACT(YEAR FROM ORDER_DATE)=2022 THEN sk.COGS END) AS "TOTAL COGS 2022"
+    FROM order_detail od
+    INNER JOIN sku_detail sk ON sk.ID = od.SKU_ID
+    WHERE od.IS_NET=1 AND od.IS_VALID=1 
+        AND EXTRACT(YEAR FROM od.ORDER_DATE) IN (2021, 2022)
+    GROUP BY 1
+), GROSS_MARGIN_TABLE AS (
+    SELECT T.CATEGORY, 
+        ROUND(CAST(100*(T."GROSS REVENUE 2021"- T."TOTAL COGS 2021")/T."GROSS REVENUE 2021" AS NUMERIC), 2) AS "GROSS_MARGIN_2021(%)",
+        ROUND(CAST(100*(T."GROSS REVENUE 2022"- T."TOTAL COGS 2022")/T."GROSS REVENUE 2022" AS NUMERIC), 2) AS "GROSS_MARGIN_2022(%)"
+    FROM GROSS_TABLE T
+)
+SELECT T.CATEGORY, T."GROSS_MARGIN_2021(%)", T."GROSS_MARGIN_2022(%)", 
+    ROUND(CAST(100*(T."GROSS_MARGIN_2022(%)" - T."GROSS_MARGIN_2021(%)")/T."GROSS_MARGIN_2021(%)" AS NUMERIC),2) AS "GROSS_REVENUE_MARGIN_GROWTH_RATE (%)"
+FROM GROSS_MARGIN_TABLE T
+ORDER BY 4 DESC
+LIMIT 5;
+
+/**
+   category      | GROSS_MARGIN_2021(%) | GROSS_MARGIN_2022(%) | GROSS_REVENUE_MARGIN_GROWTH_RATE (%)
+-------------------+----------------------+----------------------+--------------------------------------
+ Superstore        |                29.23 |                69.18 |                               136.67
+ Mobiles & Tablets |                40.01 |                88.65 |                               121.57
+ Appliances        |                23.99 |                37.76 |                                57.40
+ Entertainment     |                37.33 |                53.29 |                                42.75
+ Women Fashion     |                34.86 |                47.15 |                                35.26
+**/
+
+
+-- https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+SELECT 
+    (CASE WHEN sk.SKU_NAME ~* 'SAMSUNG' THEN 'SAMSUNG'
+        WHEN sk.SKU_NAME ~* 'IPHONE' THEN 'IPHONE'
+        WHEN sk.SKU_NAME ~* 'HUAWEI' THEN 'HUAWEI'
+        WHEN sk.SKU_NAME ~* 'LENOVO' THEN 'LENOVO'
+        WHEN sk.SKU_NAME ~* 'SONY' THEN 'SONY'
+        ELSE sk.SKU_NAME
+        END
+    ) AS "SKU_NAME",
+    SUM(CASE WHEN EXTRACT(YEAR FROM od.ORDER_DATE)=2021 THEN od.DISCOUNT_AFTER END) AS "2021",
+    SUM(CASE WHEN EXTRACT(YEAR FROM od.ORDER_DATE)=2022 THEN od.DISCOUNT_AFTER END) AS "2022"
+FROM order_detail od
+INNER JOIN sku_detail sk ON sk.ID = od.SKU_ID
+WHERE 
+    od.IS_VALID=1 AND EXTRACT(YEAR FROM od.ORDER_DATE) IN (2021, 2022)
+    AND (sk.SKU_NAME ILIKE '%SAMSUNG%' 
+        or sk.SKU_NAME ILIKE '%IPHONE%' 
+        or sk.SKU_NAME ILIKE '%HUAWEI%' 
+        or sk.SKU_NAME ILIKE '%SONY%' 
+        or sk.SKU_NAME ILIKE '%LENOVO%' 
+    )
+GROUP BY (
+    (CASE WHEN sk.SKU_NAME ~* 'SAMSUNG' THEN 'SAMSUNG'
+        WHEN sk.SKU_NAME ~* 'IPHONE' THEN 'IPHONE'
+        WHEN sk.SKU_NAME ~* 'HUAWEI' THEN 'HUAWEI'
+        WHEN sk.SKU_NAME ~* 'LENOVO' THEN 'LENOVO'
+        WHEN sk.SKU_NAME ~* 'SONY' THEN 'SONY'
+        ELSE sk.SKU_NAME
+        END
+    ))
+ORDER BY 2 DESC, 3 DESC;
+
+/**
+ SKU_NAME |   2021    |    2022
+----------+-----------+------------
+ IPHONE   | 208306826 |  145488592
+ SAMSUNG  | 176406304 |  412357844
+ LENOVO   |  38758210 | 23621590.4
+ HUAWEI   |  32217434 |   30942826
+ SONY     |  31617540 |   32343178
+ **/

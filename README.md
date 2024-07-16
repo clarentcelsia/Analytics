@@ -6,9 +6,9 @@ Dashboard<br>
 <br>
 
 Analysis <br>
-- [Exploratory Data Analysis SAAS Sales](https://github.com/clarentcelsia/ReportAnalyst/blob/master/saas.ipynb)
-- [Exploratory Data Analysis Marketing Campaign](https://github.com/clarentcelsia/ReportAnalyst/blob/master/marketing_campaign.ipynb) <br>
-- [Exploratory Data Analysis Movie Content](https://github.com/clarentcelsia/ReportAnalyst/blob/master/netflix.ipynb)
+- [Exploratory Data SAAS Sales](https://github.com/clarentcelsia/ReportAnalyst/blob/master/saas.ipynb)
+- [Exploratory Data Marketing Campaign](https://github.com/clarentcelsia/ReportAnalyst/blob/master/marketing_campaign.ipynb) <br>
+- [Exploratory Data Movie Content](https://github.com/clarentcelsia/ReportAnalyst/blob/master/netflix.ipynb)
 <br>
 
 SQL <br>

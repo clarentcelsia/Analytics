@@ -6,6 +6,7 @@ Dashboard<br>
 <br>
 
 Analysis <br>
+- [ML Approach in Predicting Customer Lifetime Value [Enhanced Version]](https://github.com/clarentcelsia/Analytics/blob/master/ml/customer_lifetime_value_in_cluster.ipynb)
 - [ML Approach in Predicting Customer Lifetime Value](https://github.com/clarentcelsia/Analytics/blob/master/ml/customer_lifetime_value.ipynb)
 - [Exploratory Data SAAS Sales](https://github.com/clarentcelsia/ReportAnalyst/blob/master/saas.ipynb)
 - [Exploratory Data Marketing Campaign](https://github.com/clarentcelsia/ReportAnalyst/blob/master/marketing_campaign.ipynb) <br>

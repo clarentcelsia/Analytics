@@ -6,8 +6,9 @@ Dashboard<br>
 <br>
 
 Analysis <br>
+- [Bank Telemarketing (In Business Explaination)](https://github.com/clarentcelsia/Analytics/blob/master/ml/bank_telemarketing.ipynb)
 - [CLV Segmentation [Extended version of CLV Prediction]](https://github.com/clarentcelsia/Analytics/blob/master/ml/customer_lifetime_value_in_cluster.ipynb)
-- [Customer Lifetime Value Prediction](https://github.com/clarentcelsia/Analytics/blob/master/ml/customer_lifetime_value.ipynb)
+- [CLV Prediction](https://github.com/clarentcelsia/Analytics/blob/master/ml/customer_lifetime_value.ipynb)
 - [Exploratory Data SAAS Sales](https://github.com/clarentcelsia/ReportAnalyst/blob/master/saas.ipynb)
 - [Exploratory Data Marketing Campaign](https://github.com/clarentcelsia/ReportAnalyst/blob/master/marketing_campaign.ipynb) <br>
 - [Exploratory Data Movie Content](https://github.com/clarentcelsia/ReportAnalyst/blob/master/netflix.ipynb)
